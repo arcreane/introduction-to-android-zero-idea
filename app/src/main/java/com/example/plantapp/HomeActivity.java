@@ -1,7 +1,11 @@
 package com.example.plantapp;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
     private boolean isSunlightOn = false;
+    private boolean isWatering = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +43,11 @@ public class HomeActivity extends AppCompatActivity {
         userNameTextView = findViewById(R.id.userNameTextView);
         ConstraintLayout mainLayout = findViewById(R.id.main);
         ImageButton musicButton = findViewById(R.id.music);
-
-        // Initialize MediaPlayer
         mediaPlayer = MediaPlayer.create(this, R.raw.background);
         mediaPlayer.setLooping(true);
         ImageButton sunlightButton = findViewById(R.id.sunlight);
+        FrameLayout waterContainer = findViewById(R.id.appContainer);
+        ImageButton waterButton = findViewById(R.id.waterButton);
 
         // Handle insets for edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
@@ -76,6 +81,16 @@ public class HomeActivity extends AppCompatActivity {
             isSunlightOn = !isSunlightOn;
         });
 
+        // Handle Water Button Click
+        waterButton.setOnClickListener(v -> {
+            if (isWatering) {
+                waterContainer.removeAllViews();
+            } else {
+                startWaterAnimation(waterContainer);
+            }
+            isWatering = !isWatering;
+        });
+
         displayUserData();
 
     }
@@ -87,6 +102,29 @@ public class HomeActivity extends AppCompatActivity {
 
         // Set default image from drawable
         plantImageView.setImageResource(defaultImageResource);
+    }
+
+    private void startWaterAnimation(FrameLayout container) {
+        for (int i = 0; i < 30; i++) {
+            View rainDrop = new View(this);
+            rainDrop.setBackgroundResource(R.drawable.water_drop);
+
+            // Randomize raindrop positions
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(5, 30);
+            int containerWidth = container.getWidth() > 0 ? container.getWidth() : 1080; // Fallback to a default width
+            params.leftMargin = (int) (Math.random() * containerWidth);
+            params.topMargin = -50; // Start off-screen
+            rainDrop.setLayoutParams(params);
+
+            container.addView(rainDrop);
+
+            // Animate the raindrop
+            ObjectAnimator animator = ObjectAnimator.ofFloat(rainDrop, "translationY", -50, container.getHeight());
+            animator.setDuration(2000 + (int) (Math.random() * 1000)); // Randomize duration
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.setRepeatMode(ValueAnimator.RESTART);
+            animator.start();
+        }
     }
 
 
