@@ -113,7 +113,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
         }
         editor.apply();
 
-        //todo add the redirect
+        Intent intent = new Intent(PlantDetailsActivity.this, HomeActivity.class);
+        startActivity(intent);
+
     }
 
     private void openImagePicker() {
