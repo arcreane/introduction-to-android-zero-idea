@@ -24,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView userNameTextView;
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
+    private boolean isSunlightOn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         // Initialize MediaPlayer
         mediaPlayer = MediaPlayer.create(this, R.raw.background);
         mediaPlayer.setLooping(true);
+        ImageButton sunlightButton = findViewById(R.id.sunlight);
 
         // Handle insets for edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
@@ -60,6 +62,18 @@ public class HomeActivity extends AppCompatActivity {
                 isPlaying = true;
                 musicButton.setImageResource(R.drawable.icon_music); // Update icon for playing state
             }
+        });
+
+        // Handle Sunlight Button Click
+        sunlightButton.setOnClickListener(v -> {
+            if (isSunlightOn) {
+                // Turn sunlight off
+                mainLayout.setBackgroundResource(android.R.color.white); // Reset to default background
+            } else {
+                // Turn sunlight on
+                mainLayout.setBackgroundResource(R.drawable.sunlight_background);
+            }
+            isSunlightOn = !isSunlightOn;
         });
 
         displayUserData();
