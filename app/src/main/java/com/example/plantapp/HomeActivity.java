@@ -2,6 +2,7 @@ package com.example.plantapp;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -38,9 +39,26 @@ public class HomeActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
 
+    private boolean isUserDataExists() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PlantAppPrefs", MODE_PRIVATE);
+        String plantName = sharedPreferences.getString("plantName", null);
+        String userName = sharedPreferences.getString("userName", null);
+
+        // Check if required data exists
+        return plantName != null && userName != null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isUserDataExists()) {
+            // Redirect to Welcome Activity if no data
+            startActivity(new Intent(this, WelcomeActivity.class));
+            finish();
+            return;
+        }
+
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_home);
 
