@@ -1,4 +1,4 @@
-package com.example.myapplication.models;
+package com.example.plantapp.models;
 import java.util.List;
 
 public class PlantResponse {

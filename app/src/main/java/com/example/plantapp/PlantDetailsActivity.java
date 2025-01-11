@@ -42,7 +42,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
     private boolean hasCustomImage = false;
     private Button saveButton;
     private Button previousButton;
-
+    private Button plantSelectionButton;
     private Uri imageUri;
     private String savedImagePath;
 
@@ -63,7 +63,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         clickImageButton = findViewById(R.id.clickImageButton);
         saveButton = findViewById(R.id.saveButton);
         previousButton = findViewById(R.id.previousButton);
-
+        plantSelectionButton = findViewById(R.id.plantSelectionButton);
         clearImageButton = findViewById(R.id.clearImageButton);
         plantImage.setImageResource(R.drawable.default_plant);
     }
@@ -73,10 +73,15 @@ public class PlantDetailsActivity extends AppCompatActivity {
         clickImageButton.setOnClickListener(v -> checkCameraPermission());
         saveButton.setOnClickListener(v -> savePlantDetails());
         previousButton.setOnClickListener(v -> finish());
+        plantSelectionButton.setOnClickListener(v -> openPlantSelectionActivity());
         clearImageButton.setOnClickListener(v -> resetImage());
     }
 
-
+    private void openPlantSelectionActivity() {
+        Intent intent = new Intent(this, PlantSelectionActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     private void resetImage() {
         plantImage.setImageResource(R.drawable.default_plant);
@@ -113,7 +118,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         }
         editor.apply();
 
-        //todo add the redirect
+        //TODO navigate to Homepage
     }
 
     private void openImagePicker() {

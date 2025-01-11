@@ -1,6 +1,7 @@
-package com.example.myapplication.api;
+package com.example.plantapp.api;
 
-import com.example.myapplication.models.PlantResponse;
+import com.example.plantapp.models.PlantResponse;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
