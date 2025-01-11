@@ -30,6 +30,9 @@ public class HomeActivity extends AppCompatActivity {
     private boolean isPlaying = false;
     private boolean isSunlightOn = false;
     private boolean isWatering = false;
+    private boolean isBeingFed = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class HomeActivity extends AppCompatActivity {
         ImageButton sunlightButton = findViewById(R.id.sunlight);
         FrameLayout waterContainer = findViewById(R.id.appContainer);
         ImageButton waterButton = findViewById(R.id.waterButton);
+        FrameLayout plantFoodContainer = findViewById(R.id.appContainer);
+        ImageButton plantFoodButton = findViewById(R.id.plantFood);
 
         // Handle insets for edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
@@ -91,6 +96,15 @@ public class HomeActivity extends AppCompatActivity {
             isWatering = !isWatering;
         });
 
+        plantFoodButton.setOnClickListener(v -> {
+            if (isBeingFed) {
+                plantFoodContainer.removeAllViews();
+            } else {
+                startPlantFoodAnimation(plantFoodContainer);
+            }
+            isBeingFed = !isBeingFed;
+        });
+
         displayUserData();
 
     }
@@ -121,6 +135,31 @@ public class HomeActivity extends AppCompatActivity {
             // Animate the raindrop
             ObjectAnimator animator = ObjectAnimator.ofFloat(rainDrop, "translationY", -50, container.getHeight());
             animator.setDuration(2000 + (int) (Math.random() * 1000)); // Randomize duration
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.setRepeatMode(ValueAnimator.RESTART);
+            animator.start();
+        }
+    }
+
+
+    private void startPlantFoodAnimation(FrameLayout container) {
+        for (int i = 0; i < 30; i++) {
+            // Create a new view for each particle
+            View supplementParticle = new View(this);
+            supplementParticle.setBackgroundResource(R.drawable.supplement_particle); // Reference to your drawable
+
+            // Randomize positions
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(30, 30); // Adjust the size of particles
+            int containerWidth = container.getWidth() > 0 ? container.getWidth() : 1080;
+            params.leftMargin = (int) (Math.random() * containerWidth); // Random horizontal position
+            params.topMargin = -50; // Start off-screen vertically
+            supplementParticle.setLayoutParams(params);
+
+            container.addView(supplementParticle);
+
+            // Animate the particles (movement)
+            ObjectAnimator animator = ObjectAnimator.ofFloat(supplementParticle, "translationY", -50, container.getHeight());
+            animator.setDuration(2000 + (int) (Math.random() * 1000)); // Randomize animation duration
             animator.setRepeatCount(ValueAnimator.INFINITE);
             animator.setRepeatMode(ValueAnimator.RESTART);
             animator.start();
