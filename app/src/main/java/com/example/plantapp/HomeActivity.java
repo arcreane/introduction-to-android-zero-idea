@@ -1,9 +1,10 @@
 package com.example.plantapp;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -11,13 +12,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.File;
+
 public class HomeActivity extends AppCompatActivity {
     private String defaultPlantName = "My Plant"; // Default plant name
     private String defaultUserName = "Default User"; // Default user name
     private int defaultImageResource = R.drawable.default_plant;
+
     private ImageView plantImageView;
     private TextView plantNameTextView;
     private TextView userNameTextView;
+    private MediaPlayer mediaPlayer;
+    private boolean isPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +36,34 @@ public class HomeActivity extends AppCompatActivity {
         plantNameTextView = findViewById(R.id.plantNameTextView);
         userNameTextView = findViewById(R.id.userNameTextView);
         ConstraintLayout mainLayout = findViewById(R.id.main);
+        ImageButton musicButton = findViewById(R.id.music);
+
+        // Initialize MediaPlayer
+        mediaPlayer = MediaPlayer.create(this, R.raw.background);
+        mediaPlayer.setLooping(true);
 
         // Handle insets for edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+            return WindowInsetsCompat.CONSUMED;
         });
 
-        // Display default user data
+        // Music button functionality
+        musicButton.setOnClickListener(v -> {
+            if (isPlaying) {
+                mediaPlayer.pause();
+                isPlaying = false;
+                musicButton.setImageResource(R.drawable.icon_music); // Update icon for stopped state
+            } else {
+                mediaPlayer.start();
+                isPlaying = true;
+                musicButton.setImageResource(R.drawable.icon_music); // Update icon for playing state
+            }
+        });
+
         displayUserData();
+
     }
 
     private void displayUserData() {
@@ -49,5 +73,15 @@ public class HomeActivity extends AppCompatActivity {
 
         // Set default image from drawable
         plantImageView.setImageResource(defaultImageResource);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        super.onDestroy();
     }
 }
