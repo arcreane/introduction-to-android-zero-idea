@@ -45,8 +45,10 @@ public class WelcomeActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Start or Navigate PlantDetailsActivity and pass the username
-//
+                // Start PlantDetailsActivity and pass the username
+                Intent intent = new Intent(WelcomeActivity.this, PlantDetailsActivity.class);
+                intent.putExtra("USER_NAME", userName);
+                startActivity(intent);
             }
         });
     }
