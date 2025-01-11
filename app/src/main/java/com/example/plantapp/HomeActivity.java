@@ -2,6 +2,8 @@ package com.example.plantapp;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -9,8 +11,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -19,20 +23,20 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.File;
 
 public class HomeActivity extends AppCompatActivity {
-    private String defaultPlantName = "My Plant"; // Default plant name
-    private String defaultUserName = "Default User"; // Default user name
-    private int defaultImageResource = R.drawable.default_plant;
-
+    private String savedPlantName;
+    private String savedUserName;
+    private String savedImagePath;
     private ImageView plantImageView;
     private TextView plantNameTextView;
     private TextView userNameTextView;
-    private MediaPlayer mediaPlayer;
-    private boolean isPlaying = false;
+
     private boolean isSunlightOn = false;
     private boolean isWatering = false;
+
     private boolean isBeingFed = false;
 
-
+    private MediaPlayer mediaPlayer;
+    private boolean isPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,34 +49,46 @@ public class HomeActivity extends AppCompatActivity {
         plantNameTextView = findViewById(R.id.plantNameTextView);
         userNameTextView = findViewById(R.id.userNameTextView);
         ConstraintLayout mainLayout = findViewById(R.id.main);
-        ImageButton musicButton = findViewById(R.id.music);
-        mediaPlayer = MediaPlayer.create(this, R.raw.background);
-        mediaPlayer.setLooping(true);
         ImageButton sunlightButton = findViewById(R.id.sunlight);
         FrameLayout waterContainer = findViewById(R.id.appContainer);
         ImageButton waterButton = findViewById(R.id.waterButton);
         FrameLayout plantFoodContainer = findViewById(R.id.appContainer);
         ImageButton plantFoodButton = findViewById(R.id.plantFood);
+        ImageButton musicButton = findViewById(R.id.music);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.background);
+        mediaPlayer.setLooping(true);
+
+        // Retrieve data from SharedPreferences
+        retrieveUserData();
+
+        // Display the data
+        displayUserData();
 
         // Handle insets for edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return WindowInsetsCompat.CONSUMED;
+            return insets;
         });
 
-        // Music button functionality
+
+
         musicButton.setOnClickListener(v -> {
             if (isPlaying) {
                 mediaPlayer.pause();
                 isPlaying = false;
-                musicButton.setImageResource(R.drawable.icon_music); // Update icon for stopped state
+                musicButton.setImageResource(R.drawable.icon_music);
+
             } else {
                 mediaPlayer.start();
                 isPlaying = true;
-                musicButton.setImageResource(R.drawable.icon_music); // Update icon for playing state
+                musicButton.setImageResource(R.drawable.icon_music);
             }
         });
+
+
+
 
         // Handle Sunlight Button Click
         sunlightButton.setOnClickListener(v -> {
@@ -104,20 +120,10 @@ public class HomeActivity extends AppCompatActivity {
             }
             isBeingFed = !isBeingFed;
         });
-
-        displayUserData();
-
     }
 
-    private void displayUserData() {
-        // Set default text views
-        plantNameTextView.setText(defaultPlantName);
-        userNameTextView.setText(defaultUserName);
 
-        // Set default image from drawable
-        plantImageView.setImageResource(defaultImageResource);
-    }
-
+    // Start Water Animation
     private void startWaterAnimation(FrameLayout container) {
         for (int i = 0; i < 30; i++) {
             View rainDrop = new View(this);
@@ -140,7 +146,6 @@ public class HomeActivity extends AppCompatActivity {
             animator.start();
         }
     }
-
 
     private void startPlantFoodAnimation(FrameLayout container) {
         for (int i = 0; i < 30; i++) {
@@ -166,6 +171,40 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+
+    // Retrieve User Data
+    private void retrieveUserData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PlantAppPrefs", MODE_PRIVATE);
+        savedPlantName = sharedPreferences.getString("plantName", "Default Plant");
+        savedUserName = sharedPreferences.getString("userName", "Default User");
+        savedImagePath = sharedPreferences.getString("plantImagePath", null);
+
+        // Log the retrieved data
+        System.out.println("Plant Name: " + savedPlantName);
+        System.out.println("User Name: " + savedUserName);
+        System.out.println("Image Path: " + savedImagePath);
+    }
+
+    // Display User Data
+    private void displayUserData() {
+        // Set text views
+        plantNameTextView.setText(savedPlantName);
+        userNameTextView.setText(savedUserName);
+
+        // Load and display the image if it exists
+        if (savedImagePath != null) {
+            File imageFile = new File(savedImagePath);
+            if (imageFile.exists()) {
+                plantImageView.setImageBitmap(BitmapFactory.decodeFile(savedImagePath));
+            } else {
+                // Set default image if saved image doesn't exist
+                plantImageView.setImageResource(R.drawable.default_plant);
+            }
+        } else {
+            // Set default image if no image path is saved
+            plantImageView.setImageResource(R.drawable.default_plant);
+        }
+    }
 
     @Override
     protected void onDestroy() {
