@@ -6,6 +6,18 @@
     android:padding="16dp"
     android:gravity="center">
 
+    <ImageButton
+        android:id="@+id/clearImageButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="8dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_clear"
+        android:background="@drawable/circular_shape"
+        android:elevation="4dp"
+        android:visibility="gone"/>
+
 
     <ImageView
         android:id="@+id/plantImage"
@@ -16,7 +28,19 @@
         android:clipToOutline="true"
         android:layout_marginBottom="16dp"/>
 
+    <Button
+        android:id="@+id/selectImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Image"
+        android:layout_marginBottom="16dp"/>
 
+    <Button
+        android:id="@+id/clickImageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:drawable/ic_menu_camera"
+        android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/plantNameInput"
@@ -27,7 +51,12 @@
         android:padding="16dp"
         android:layout_marginBottom="16dp"/>
 
-
+    <Button
+        android:id="@+id/plantSelectionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Plant"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:id="@+id/saveButton"
