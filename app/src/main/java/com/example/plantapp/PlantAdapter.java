@@ -1,7 +1,7 @@
 package com.example.plantapp;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +15,47 @@ import com.example.plantapp.models.PlantResponse;
 import java.util.ArrayList;
 import java.util.List;
 import android.graphics.Color;
-import android.content.SharedPreferences;
-import android.content.Context;
-
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHolder> {
+    private static final int SELECTED_COLOR = Color.parseColor("#9999CC");
+    private Context context;
+    private OnPlantSelectedListener onPlantSelectedListener;
+    private int selectedPosition = RecyclerView.NO_POSITION;
     private List<PlantResponse.Plant> plants = new ArrayList<>();
+
+    public interface OnPlantSelectedListener {
+        void onPlantSelected(PlantResponse.Plant plant);
+    }
+
+    public PlantAdapter(Context context) {
+        this.context = context;
+    }
+
+    public void setOnPlantSelectedListener(OnPlantSelectedListener listener) {
+        this.onPlantSelectedListener = listener;
+    }
 
     public void setPlants(List<PlantResponse.Plant> plants) {
         this.plants = plants;
+        checkForPreviousSelection();
         notifyDataSetChanged();
+    }
+
+    private void checkForPreviousSelection() {
+        SharedPreferences prefs = context.getSharedPreferences("PlantAppPrefs", Context.MODE_PRIVATE);
+        String previousId = prefs.getString("selectedPlantId", null);
+
+        if (previousId != null) {
+            for (int i = 0; i < plants.size(); i++) {
+                if (plants.get(i).id.equals(previousId)) {
+                    selectedPosition = i;
+                    if (onPlantSelectedListener != null) {
+                        onPlantSelectedListener.onPlantSelected(plants.get(i));
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     @NonNull
@@ -47,8 +78,8 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     }
 
     class PlantViewHolder extends RecyclerView.ViewHolder {
-        private ImageView plantImageView;
-        private TextView plantNameTextView;
+        private final ImageView plantImageView;
+        private final TextView plantNameTextView;
 
         public PlantViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,31 +89,37 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    itemView.setBackgroundColor(Color.parseColor("#E6E6FA"));
+                    int previousPosition = selectedPosition;
+                    selectedPosition = position;
+
+                    notifyItemChanged(previousPosition);
+                    notifyItemChanged(selectedPosition);
+
                     PlantResponse.Plant plant = plants.get(position);
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("SELECTED_PLANT_NAME",
-                            plant.common_names != null && !plant.common_names.isEmpty()
-                                    ? plant.common_names.get(0)
-                                    : plant.scientific_name);
-                    resultIntent.putExtra("SELECTED_PLANT_IMAGE_URL", plant.image_url);
-                    resultIntent.putExtra("SELECTED_PLANT_ID", plant.id);
+                    if (onPlantSelectedListener != null) {
+                        onPlantSelectedListener.onPlantSelected(plant);
+                    }
 
-                    SharedPreferences prefs = itemView.getContext().getSharedPreferences("PlantAppPrefs", Context.MODE_PRIVATE);
+                    // Save the selection to SharedPreferences
+                    SharedPreferences prefs = context.getSharedPreferences("PlantAppPrefs", Context.MODE_PRIVATE);
                     prefs.edit().putString("selectedPlantId", plant.id).apply();
-
-                    ((Activity) itemView.getContext()).setResult(Activity.RESULT_OK, resultIntent);
-                    ((Activity) itemView.getContext()).finish();
                 }
             });
         }
 
         public void bind(PlantResponse.Plant plant) {
+            // Set plant name
             String displayName = plant.common_names != null && !plant.common_names.isEmpty()
                     ? plant.common_names.get(0)
                     : plant.scientific_name;
             plantNameTextView.setText(displayName);
 
+            // Set background based on selection state
+            itemView.setBackgroundColor(getAdapterPosition() == selectedPosition
+                    ? SELECTED_COLOR
+                    : Color.TRANSPARENT);
+
+            // Load image
             if (plant.image_url != null && !plant.image_url.isEmpty()) {
                 Glide.with(itemView.getContext())
                         .load(plant.image_url)

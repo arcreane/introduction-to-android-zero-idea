@@ -80,7 +80,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
     private void openPlantSelectionActivity() {
         Intent intent = new Intent(this, PlantSelectionActivity.class);
         startActivity(intent);
-        finish();
+
     }
 
     private void resetImage() {

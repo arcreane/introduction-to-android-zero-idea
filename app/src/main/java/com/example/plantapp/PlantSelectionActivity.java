@@ -1,5 +1,7 @@
 package com.example.plantapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -10,9 +12,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +40,8 @@ public class PlantSelectionActivity extends AppCompatActivity {
     private PlantAdapter plantAdapter;
     private static final String BASE_URL = "https://trefle.io/";
     private static final String API_TOKEN = "S2rrG3323xE4m6Kmvz535RxDyKsXEtPsmf7VJEjMwik";
-
+    private Button selectPlantButton;
+    private PlantResponse.Plant selectedPlant;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +49,38 @@ public class PlantSelectionActivity extends AppCompatActivity {
 
         plantRecyclerView = findViewById(R.id.plantRecyclerView);
         plantRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        plantAdapter = new PlantAdapter();
+        plantAdapter = new PlantAdapter(this);
         plantRecyclerView.setAdapter(plantAdapter);
+        selectPlantButton = findViewById(R.id.selectPlantButton);
+
+        plantAdapter.setOnPlantSelectedListener(plant -> {
+            selectedPlant = plant;
+            selectPlantButton.setVisibility(View.VISIBLE);
+        });
+
+        selectPlantButton.setOnClickListener(v -> {
+            if (selectedPlant != null) {
+                SharedPreferences prefs = getSharedPreferences("PlantAppPrefs", Context.MODE_PRIVATE);
+                prefs.edit()
+                        .putString("selectedPlantId", selectedPlant.id)
+                        .apply();
+
+                // Add these log statements
+                Log.d("PlantSelection", "Attempting to save plant ID: " + selectedPlant.id);
+                String savedId = prefs.getString("selectedPlantId", "not_found");
+                Log.d("PlantSelection", "Verified saved plant ID: " + savedId);
+
+                Toast.makeText(this, "Plant selected successfully!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         fetchPlants();
     }
 
-    private void fetchPlants() {
+
+
+            private void fetchPlants() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -76,75 +106,5 @@ public class PlantSelectionActivity extends AppCompatActivity {
                         "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHolder> {
-        private List<PlantResponse.Plant> plants = new ArrayList<>();
-
-        public void setPlants(List<PlantResponse.Plant> plants) {
-            this.plants = plants;
-            notifyDataSetChanged();
-        }
-
-        @NonNull
-        @Override
-        public PlantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_plant, parent, false);
-            return new PlantViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull PlantViewHolder holder, int position) {
-            PlantResponse.Plant plant = plants.get(position);
-            holder.bind(plant);
-        }
-
-        @Override
-        public int getItemCount() {
-            return plants.size();
-        }
-
-        private class PlantViewHolder extends RecyclerView.ViewHolder {
-            private ImageView plantImageView;
-            private TextView plantNameTextView;
-
-            public PlantViewHolder(@NonNull View itemView) {
-                super(itemView);
-                plantImageView = itemView.findViewById(R.id.plantImageView);
-                plantNameTextView = itemView.findViewById(R.id.plantNameTextView);
-
-                itemView.setOnClickListener(v -> {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        PlantResponse.Plant plant = plants.get(position);
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra("SELECTED_PLANT_NAME",
-                                plant.common_names != null && !plant.common_names.isEmpty()
-                                        ? plant.common_names.get(0)
-                                        : plant.scientific_name);
-                        resultIntent.putExtra("SELECTED_PLANT_IMAGE_URL", plant.image_url);
-                        resultIntent.putExtra("SELECTED_PLANT_ID", plant.id);
-                        setResult(RESULT_OK, resultIntent);
-                        finish();
-                    }
-                });
-            }
-
-
-            public void bind(PlantResponse.Plant plant) {
-                String displayName = plant.common_names != null && !plant.common_names.isEmpty()
-                        ? plant.common_names.get(0)
-                        : plant.scientific_name;
-                plantNameTextView.setText(displayName);
-
-                if (plant.image_url != null && !plant.image_url.isEmpty()) {
-                    Glide.with(itemView.getContext())
-                            .load(plant.image_url)
-                            .centerCrop()
-                            .into(plantImageView);
-                }
-            }
-        }
     }
 }
