@@ -195,6 +195,12 @@ public class HomeActivity extends AppCompatActivity {
             isBeingFed = !isBeingFed;
         });
 
+        plantImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, PlantInformationActivity.class);
+            startActivity(intent);
+        });
+
+
 //        load avatars
 
         loadAvatar(AvatarId);
@@ -269,8 +275,6 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void startPlantFoodAnimation(FrameLayout container) {
         for (int i = 0; i < 30; i++) {
             // Create a new view for each particle
@@ -343,6 +347,7 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
         avatarApi = retrofit.create(AvatarApi.class);
     }
+
 
     @Override
     protected void onDestroy() {
