@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +22,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.example.plantapp.api.AvatarApi;
+
 import java.io.File;
+
+import retrofit2.Retrofit;
 
 public class HomeActivity extends AppCompatActivity {
     private String savedPlantName;
@@ -38,11 +45,16 @@ public class HomeActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
+    private ImageView avatar;
+    private AvatarApi avatarApi;
+    private static final String BASE_URL = "https://api.multiavatar.com/";
+    String AvatarId;
 
     private boolean isUserDataExists() {
         SharedPreferences sharedPreferences = getSharedPreferences("PlantAppPrefs", MODE_PRIVATE);
-        String plantName = sharedPreferences.getString("plantName", null);
-        String userName = sharedPreferences.getString("userName", null);
+        String plantName = sharedPreferences.getString("plantName", "Cactus");
+        String userName = sharedPreferences.getString("userName", "Cactus Mom");
+        AvatarId = sharedPreferences.getString("AvatarId", "1");
 
         // Check if required data exists
         return plantName != null && userName != null;
@@ -73,15 +85,22 @@ public class HomeActivity extends AppCompatActivity {
         FrameLayout plantFoodContainer = findViewById(R.id.appContainer);
         ImageButton plantFoodButton = findViewById(R.id.plantFood);
         ImageButton musicButton = findViewById(R.id.music);
+        avatar = findViewById(R.id.avatar);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.background);
         mediaPlayer.setLooping(true);
+
+//        send a retrofit request to display the avatar user chose;
+
 
         // Retrieve data from SharedPreferences
         retrieveUserData();
 
         // Display the data
         displayUserData();
+
+//        setup retrofit
+        setupRetrofit();
 
         // Handle insets for edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
@@ -138,6 +157,10 @@ public class HomeActivity extends AppCompatActivity {
             }
             isBeingFed = !isBeingFed;
         });
+
+//        load avatars
+
+        loadAvatar(AvatarId);
     }
 
 
@@ -222,6 +245,20 @@ public class HomeActivity extends AppCompatActivity {
             // Set default image if no image path is saved
             plantImageView.setImageResource(R.drawable.default_plant);
         }
+    }
+
+    private void loadAvatar(String number) {
+        String avatarUrl = BASE_URL + number + ".png";
+        Glide.with(HomeActivity.this)
+                .load(avatarUrl)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(avatar);
+    }
+    private void setupRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .build();
+        avatarApi = retrofit.create(AvatarApi.class);
     }
 
     @Override
