@@ -28,6 +28,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -36,6 +37,11 @@ import com.example.plantapp.api.AvatarApi;
 import java.io.File;
 
 import retrofit2.Retrofit;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+
 
 public class HomeFragment extends Fragment {
     private String savedPlantName;
@@ -56,6 +62,11 @@ public class HomeFragment extends Fragment {
     private static final String BASE_URL = "https://api.multiavatar.com/";
     private String AvatarId;
     private View rootView;
+    private SensorManager sensorManager;
+    private Sensor gyroscopeSensor;
+    private SensorEventListener gyroscopeEventListener;
+    private RecyclerView recyclerView;
+    private FrameLayout waterContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +80,31 @@ public class HomeFragment extends Fragment {
         setupClickListeners();
         loadAvatar(AvatarId);
 
+        sensorManager = (SensorManager) requireContext().getSystemService(Context.SENSOR_SERVICE);
+        gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        gyroscopeEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) {
+                    return;
+                }
+                    float x = event.values[0]; // Rotation around x-axis
+                    adjustRainDirection(x);
+                }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                // Not used
+            }
+        };
+
+// Register the listener
+        sensorManager.registerListener(gyroscopeEventListener, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+
         return rootView;
+
     }
 
     private void initializeViews() {
@@ -77,6 +112,7 @@ public class HomeFragment extends Fragment {
         plantNameTextView = rootView.findViewById(R.id.plantNameTextView);
         userNameTextView = rootView.findViewById(R.id.userNameTextView);
         avatar = rootView.findViewById(R.id.avatar);
+        recyclerView = rootView.findViewById(R.id.recyclerView);
     }
 
     private void setupMediaPlayer() {
@@ -84,13 +120,24 @@ public class HomeFragment extends Fragment {
         mediaPlayer.setLooping(true);
     }
 
+    private void adjustRainDirection(float x) {
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) waterContainer.getLayoutParams();
+
+    // Set the new left margin
+        params.leftMargin = (int) x * -60;
+
+    // Apply the updated LayoutParams back to the RecyclerView
+        waterContainer.setLayoutParams(params);
+    }
+
+
     private void setupClickListeners() {
         ConstraintLayout mainLayout = rootView.findViewById(R.id.main);
         ImageButton sunlightButton = rootView.findViewById(R.id.sunlight);
         ImageButton waterButton = rootView.findViewById(R.id.waterButton);
         ImageButton plantFoodButton = rootView.findViewById(R.id.plantFood);
         ImageButton musicButton = rootView.findViewById(R.id.music);
-        FrameLayout waterContainer = rootView.findViewById(R.id.appContainer);
+        waterContainer = rootView.findViewById(R.id.appContainer);
         FrameLayout plantFoodContainer = rootView.findViewById(R.id.appContainer);
 
         setupMusicButton(musicButton);
@@ -286,6 +333,12 @@ public class HomeFragment extends Fragment {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+
+        // Unregister sensor listener
+        if (sensorManager != null && gyroscopeEventListener != null) {
+            sensorManager.unregisterListener(gyroscopeEventListener);
+        }
+
         super.onDestroyView();
     }
 }

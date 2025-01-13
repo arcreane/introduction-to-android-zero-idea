@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <FrameLayout
         android:id="@+id/appContainer"
@@ -13,18 +20,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 
-    <EditText
-        android:id="@+id/plantNameTextView"
-        android:layout_width="130dp"
-        android:layout_height="46dp"
-        android:hint="Enter plant name"
-        android:inputType="text"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.841" />
 
     <ImageView
         android:id="@+id/plantImageView"
@@ -37,6 +32,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/avatar"
         app:layout_constraintVertical_bias="0.1" />
+
+    <TextView
+        android:id="@+id/plantNameTextView"
+        android:textAllCaps="true"
+        android:layout_width="130dp"
+        android:layout_height="46dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:hint="Enter plant name"
+        android:inputType="text"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/plantImageView"
+        app:layout_constraintStart_toStartOf="@id/plantImageView"
+        app:layout_constraintEnd_toEndOf="@id/plantImageView"
+        app:layout_constraintVertical_bias="0" />
+
 
     <ImageButton
         android:id="@+id/sunlight"
@@ -113,7 +125,7 @@
         android:id="@+id/userNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#000"
+        android:textAllCaps="true"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/plantImageView"
