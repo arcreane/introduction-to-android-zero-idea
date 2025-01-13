@@ -42,7 +42,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
     private boolean hasCustomImage = false;
     private Button saveButton;
     private Button previousButton;
-    private Button plantSelectionButton;
+
     private Uri imageUri;
     private String savedImagePath;
 
@@ -63,7 +63,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         clickImageButton = findViewById(R.id.clickImageButton);
         saveButton = findViewById(R.id.saveButton);
         previousButton = findViewById(R.id.previousButton);
-        plantSelectionButton = findViewById(R.id.plantSelectionButton);
+
         clearImageButton = findViewById(R.id.clearImageButton);
         plantImage.setImageResource(R.drawable.default_plant);
     }
@@ -73,15 +73,10 @@ public class PlantDetailsActivity extends AppCompatActivity {
         clickImageButton.setOnClickListener(v -> checkCameraPermission());
         saveButton.setOnClickListener(v -> savePlantDetails());
         previousButton.setOnClickListener(v -> finish());
-        plantSelectionButton.setOnClickListener(v -> openPlantSelectionActivity());
         clearImageButton.setOnClickListener(v -> resetImage());
     }
 
-    private void openPlantSelectionActivity() {
-        Intent intent = new Intent(this, PlantSelectionActivity.class);
-        startActivity(intent);
 
-    }
 
     private void resetImage() {
         plantImage.setImageResource(R.drawable.default_plant);
@@ -93,7 +88,6 @@ public class PlantDetailsActivity extends AppCompatActivity {
     private void displaySelectedPlant() {
         String plantName = getIntent().getStringExtra("PLANT_NAME");
         String plantImageUrl = getIntent().getStringExtra("PLANT_IMAGE_URL");
-
 
         if (plantName != null) {
             plantNameInput.setText(plantName);
@@ -114,13 +108,14 @@ public class PlantDetailsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("plantName", plantName);
         editor.putString("userName", getIntent().getStringExtra("USER_NAME"));
-        editor.putString("AvatarId", getIntent().getStringExtra("AVATAR_ID"));
         if (savedImagePath != null) {
             editor.putString("plantImagePath", savedImagePath);
         }
         editor.apply();
 
-        //TODO navigate to Homepage
+        Intent intent = new Intent(PlantDetailsActivity.this, HomeActivity.class);
+        startActivity(intent);
+
     }
 
     private void openImagePicker() {
