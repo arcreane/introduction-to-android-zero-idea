@@ -94,6 +94,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         String plantName = getIntent().getStringExtra("PLANT_NAME");
         String plantImageUrl = getIntent().getStringExtra("PLANT_IMAGE_URL");
 
+
         if (plantName != null) {
             plantNameInput.setText(plantName);
         }
@@ -113,6 +114,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("plantName", plantName);
         editor.putString("userName", getIntent().getStringExtra("USER_NAME"));
+        editor.putString("AvatarId", getIntent().getStringExtra("AVATAR_ID"));
         if (savedImagePath != null) {
             editor.putString("plantImagePath", savedImagePath);
         }
