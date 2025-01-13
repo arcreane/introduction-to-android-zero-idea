@@ -1,6 +1,6 @@
 package com.example.plantapp.api;
 
-import com.example.plantapp.models.PlantInformation;
+import com.example.plantapp.models.PlantInformationModel;
 import com.example.plantapp.models.PlantResponse;
 
 import retrofit2.Call;
@@ -18,7 +18,7 @@ public interface TrefleApi {
 
 
     @GET("api/v1/plants/{plantId}")
-    Call<PlantInformation> getPlantDetails(
+    Call<PlantInformationModel> getPlantDetails(
             @Path("plantId") String plantId,
             @Header("Authorization") String apiToken
     );

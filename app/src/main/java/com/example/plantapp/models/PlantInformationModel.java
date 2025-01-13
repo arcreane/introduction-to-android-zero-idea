@@ -3,7 +3,7 @@ package com.example.plantapp.models;
 import java.util.List;
 import java.util.Map;
 
-public class PlantInformation {
+public class PlantInformationModel {
     public Data data;
 
     public static class Data {
