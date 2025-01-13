@@ -37,8 +37,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.609" />
+        app:layout_constraintTop_toBottomOf="@id/avatar"
+        app:layout_constraintVertical_bias="0.1" />
 
     <ImageButton
         android:id="@+id/sunlight"
@@ -98,6 +98,22 @@
         app:layout_constraintVertical_bias="0.219"
         app:srcCompat="@drawable/icon_water" />
 
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/circular_shape"
+        android:scaleType="fitXY"
+        android:clipToOutline="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="150dp"
+        app:layout_constraintBottom_toTopOf="@id/userNameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2" />
+
     <TextView
         android:id="@+id/userNameTextView"
         android:layout_width="wrap_content"
@@ -105,11 +121,11 @@
         android:textColor="#000"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/plantImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.233" />
+        app:layout_constraintTop_toBottomOf="@id/avatar"
+        app:layout_constraintVertical_bias="0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
