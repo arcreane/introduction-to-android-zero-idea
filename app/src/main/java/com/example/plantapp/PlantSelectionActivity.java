@@ -77,9 +77,6 @@ public class PlantSelectionActivity extends AppCompatActivity {
 
         fetchPlants();
     }
-
-
-
             private void fetchPlants() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

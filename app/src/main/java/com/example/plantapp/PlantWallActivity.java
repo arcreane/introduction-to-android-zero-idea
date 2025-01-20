@@ -1,4 +1,4 @@
-package com.example.plantapp.fragment;
+package com.example.plantapp;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,66 +6,41 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.plantapp.R;
-import com.example.plantapp.SavePlantWallActivity;
+import java.io.File;
 
-public class FeedFragment extends Fragment {
+public class PlantWallActivity extends AppCompatActivity {
     private LinearLayout plantListLayout;
     private Button addNewPlantButton;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
+        setContentView(R.layout.activity_plant_wall);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_feed, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Initialize views
-        plantListLayout = view.findViewById(R.id.plantListLayout);
-        addNewPlantButton = view.findViewById(R.id.addNewPlantButton);
+        plantListLayout = findViewById(R.id.plantListLayout);
+        addNewPlantButton = findViewById(R.id.addNewPlantButton);
 
         // Load saved plants and display them
         loadPlants();
 
         // Add button listener to navigate to SavePlantWallActivity
         addNewPlantButton.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), SavePlantWallActivity.class);
+            Intent intent = new Intent(PlantWallActivity.this, SavePlantWallActivity.class);
             startActivity(intent);
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Reload plants when returning to the fragment
-        plantListLayout.removeAllViews(); // Clear existing views
-        loadPlants();
-    }
-
     private void loadPlants() {
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("PlantDetails", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("PlantDetails", Context.MODE_PRIVATE);
         String plantsData = sharedPreferences.getString("plants", "");
 
         if (!plantsData.isEmpty()) {
@@ -94,7 +69,7 @@ public class FeedFragment extends Fragment {
                 plantListLayout.addView(plantView);
             }
         } else {
-            Toast.makeText(requireContext(), "No plants found!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No plants found!", Toast.LENGTH_SHORT).show();
         }
     }
 }
