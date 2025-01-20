@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eabfd33f-71c5-4de9-84ec-8c79c03e3cb6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/PlantSelectionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/PlantSelectionActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/SavePlantWallActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/SavePlantWallActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/fragment/FeedFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/fragment/FeedFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/res/layout/fragment_feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/res/layout/fragment_feed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/PlantWallActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/res/layout/activity_plant_wall.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,9 +19,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2ruV43g1M1K4sComZmrDxu0h3eZ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -37,7 +34,7 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "feat/plant-wall-page",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/sharm/AndroidStudioProjects/PlantApp/app/conf",
     "settings.editor.selected.configurable": "AndroidSdkUpdater"
   }
