@@ -1,4 +1,4 @@
-package com.example.plantapp;
+package com.example.plantapp.fragment;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.example.plantapp.R;
 import com.example.plantapp.api.AvatarApi;
 
 import java.io.File;

@@ -1,19 +1,17 @@
 package com.example.plantapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.plantapp.api.AvatarApi;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,8 +28,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private AvatarApi avatarApi;
     private static final String BASE_URL = "https://api.multiavatar.com/";
 
-    private int currentNumber = 1; // Start with 1
-    private int defaultNumber = 1; // Store first number shown
+    private int currentNumber = 1;
+    private int defaultNumber = 1;
+    private boolean isLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,7 @@ public class WelcomeActivity extends AppCompatActivity {
         initializeViews();
         setupRetrofit();
         setupClickListeners();
-        loadAvatar(currentNumber); // Load first avatar
+        loadAvatar(currentNumber);
     }
 
     private void initializeViews() {
@@ -65,13 +64,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         nextAvatarButton.setOnClickListener(v -> {
-            currentNumber++;
-            loadAvatar(currentNumber);
-            updateNavigationButtons();
+            if (!isLoading) {
+                currentNumber++;
+                loadAvatar(currentNumber);
+                updateNavigationButtons();
+            }
         });
 
         previousAvatarButton.setOnClickListener(v -> {
-            if (currentNumber > 1) {
+            if (!isLoading && currentNumber > 1) {
                 currentNumber--;
                 loadAvatar(currentNumber);
                 updateNavigationButtons();
@@ -93,11 +94,43 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void loadAvatar(int number) {
-        String avatarUrl = BASE_URL + number + ".png";
-        Glide.with(WelcomeActivity.this)
-                .load(avatarUrl)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(avatarView);
+        isLoading = true;
+        avatarView.setAlpha(0.5f); // Dim the image while loading
+
+        Call<ResponseBody> call = avatarApi.getAvatar(String.valueOf(number));
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        byte[] bytes = response.body().bytes();
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        runOnUiThread(() -> {
+                            avatarView.setImageBitmap(bitmap);
+                            avatarView.setAlpha(1.0f);
+                            isLoading = false;
+                        });
+                    } catch (IOException e) {
+                        handleError("Error processing image: " + e.getMessage());
+                    }
+                } else {
+                    handleError("Error loading avatar");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                handleError("Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void handleError(String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(WelcomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            avatarView.setAlpha(1.0f);
+            isLoading = false;
+        });
     }
 
     private void updateNavigationButtons() {
