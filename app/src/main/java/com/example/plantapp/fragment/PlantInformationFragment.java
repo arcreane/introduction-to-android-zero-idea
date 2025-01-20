@@ -1,4 +1,4 @@
-package com.example.plantapp;
+package com.example.plantapp.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.plantapp.R;
 import com.example.plantapp.api.TrefleApi;
 import com.example.plantapp.models.PlantInformationModel;
 
