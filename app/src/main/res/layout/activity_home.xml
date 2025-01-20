@@ -127,5 +127,16 @@
         app:layout_constraintTop_toBottomOf="@id/avatar"
         app:layout_constraintVertical_bias="0" />
 
+    <!-- Button to navigate back to PlantWallActivity -->
+    <Button
+        android:id="@+id/goToWallButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Go to wall"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,9 @@
         android:required="false" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
 
     <application
@@ -31,6 +34,12 @@
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SavePlantWallActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlantWallActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"

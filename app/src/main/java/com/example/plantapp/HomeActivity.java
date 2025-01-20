@@ -10,6 +10,7 @@ import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -59,6 +60,8 @@ public class HomeActivity extends AppCompatActivity {
     private boolean isPlaying = false;
     private ImageView avatar;
     private AvatarApi avatarApi;
+
+    private Button goToWallButton;
     private static final String BASE_URL = "https://api.multiavatar.com/";
     String AvatarId;
 
@@ -102,6 +105,9 @@ public class HomeActivity extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(this, R.raw.background);
         mediaPlayer.setLooping(true);
 
+
+        goToWallButton = findViewById(R.id.goToWallButton);
+
 //        send a retrofit request to display the avatar user chose;
 
 
@@ -113,6 +119,11 @@ public class HomeActivity extends AppCompatActivity {
 
 //        setup retrofit
         setupRetrofit();
+
+        goToWallButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, PlantWallActivity.class);
+            startActivity(intent);
+        });
 
         // Handle insets for edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
