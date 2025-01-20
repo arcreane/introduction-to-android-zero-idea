@@ -49,7 +49,12 @@ public class HomeActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
-            } else if (itemId == R.id.nav_feed) {
+
+            }
+            if (itemId == R.id.nav_plant) {
+                selectedFragment = new PlantInformationFragment();
+
+            }else if (itemId == R.id.nav_feed) {
                 selectedFragment = new FeedFragment();
             }
 
