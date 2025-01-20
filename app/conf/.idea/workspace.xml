@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eabfd33f-71c5-4de9-84ec-8c79c03e3cb6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/fragment/FeedFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/fragment/HomeFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/FeedFragment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/HomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/HomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/HomeFragment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/PlantInformationFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/fragment/PlantInformationFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/WelcomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/WelcomeActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/res/layout/activity_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/res/layout/activity_home.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/PlantSelectionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/PlantSelectionActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/SavePlantWallActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/SavePlantWallActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/fragment/FeedFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/com/example/plantapp/fragment/FeedFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/main/res/layout/fragment_feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/res/layout/fragment_feed.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/res/layout/fragment_home.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +37,7 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "feat/plant-wall-page",
     "last_opened_file_path": "C:/Users/sharm/AndroidStudioProjects/PlantApp/app/conf",
     "settings.editor.selected.configurable": "AndroidSdkUpdater"
   }

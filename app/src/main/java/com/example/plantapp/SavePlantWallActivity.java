@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.plantapp.fragment.FeedFragment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -106,11 +108,9 @@ public class SavePlantWallActivity extends AppCompatActivity {
                 editor.apply();
 
                 Toast.makeText(this, "Plant saved successfully!", Toast.LENGTH_SHORT).show();
+                // go back to feed fragment
+                finish();
 
-                // Navigate to MyPlantWallActivity
-                Intent intent = new Intent(this, PlantWallActivity.class);
-                startActivity(intent);
-                finish(); // Optional: Close this activity
             } catch (IOException e) {
                 Toast.makeText(this, "Failed to save plant", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
